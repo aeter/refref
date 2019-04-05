@@ -20,10 +20,10 @@ class Scenery {
         });
     }
     
-    
     make_scene() {   
         var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 10, BABYLON.Vector3.Zero(), this.scene);
         camera.setPosition(new BABYLON.Vector3(-10, 3, 0));
+        camera.wheelPrecision = 30;
         camera.attachControl(this.canvas, true);
 
         var music = new BABYLON.Sound("Music", "assets/sea_waves.mp3", this.scene, null, { loop: true, autoplay: true });
@@ -33,7 +33,7 @@ class Scenery {
         light.specular = new BABYLON.Color3(1, 1, 0); // make the light's color yellow, like the sun
         light.intensity = 0.5; // dim the light to half its strenght.
 
-        var skybox = BABYLON.Mesh.CreateBox("skyBox", 300.0, this.scene);
+        var skybox = BABYLON.Mesh.CreateBox("skyBox", 500.0, this.scene);
         var skybox_material = new BABYLON.StandardMaterial("skyBox", this.scene);
         skybox_material.backFaceCulling = false;
         skybox_material.reflectionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
