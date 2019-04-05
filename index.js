@@ -36,15 +36,14 @@ class Scenery {
         var skybox = BABYLON.Mesh.CreateBox("skyBox", 300.0, this.scene);
         var skybox_material = new BABYLON.StandardMaterial("skyBox", this.scene);
         skybox_material.backFaceCulling = false;
-        var cube_texture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
-        skybox_material.reflectionTexture = cube_texture;
+        skybox_material.reflectionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
         skybox_material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
         skybox.material = skybox_material;
 
         var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:5}, this.scene);
         var material = new BABYLON.StandardMaterial("kosh", this.scene);
-        material.refractionTexture = cube_texture;
-        material.reflectionTexture = cube_texture;
+        material.refractionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
+        material.reflectionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
         // various material params, mostly adjusted from the babylonjs demos.
         material.diffuseColor = new BABYLON.Color3(0, 0, 0);
         material.invertRefractionY = false;
