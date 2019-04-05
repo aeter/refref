@@ -2,27 +2,22 @@ window.addEventListener("DOMContentLoaded", () => {
     new Scenery('scenery_id').run();
 });
 
-
 class Scenery {
     constructor(canvas_id) {
         this.canvas = document.getElementById(canvas_id);
         this.engine = new BABYLON.Engine(this.canvas, true);
         this.scene = new BABYLON.Scene(this.engine);
-        this.asset_manager = new BABYLON.AssetsManager(this.scene);
     }
 
     run() {
+        this.make_scene();
+        this.engine.runRenderLoop(() => {
+            this.scene.render();
+        });
+
         window.addEventListener("resize", () => {
             this.engine.resize();
         });
-
-        this.make_scene();
-        this.asset_manager.onFinish = () => {
-            this.engine.runRenderLoop(() => {
-                this.scene.render();
-            });
-        };
-        this.asset_manager.load();
     }
     
     
@@ -31,10 +26,7 @@ class Scenery {
         camera.setPosition(new BABYLON.Vector3(-10, 3, 0));
         camera.attachControl(this.canvas, true);
 
-        //var music_task = this.asset_manager.addBinaryFileTask("music task", "assets/sea_waves.mp3");
-        //music_task.onSuccess = function (task) {
-            var music = new BABYLON.Sound("Music", "assets/sea_waves.mp3", this.scene, null, { loop: true, autoplay: true });
-        //}
+        var music = new BABYLON.Sound("Music", "assets/sea_waves.mp3", this.scene, null, { loop: true, autoplay: true });
         
         var sun_position = new BABYLON.Vector3(38, 6.0, 50.0); // so the light originates from the sun's position
         var light = new BABYLON.PointLight("light", sun_position, this.scene);
@@ -44,14 +36,15 @@ class Scenery {
         var skybox = BABYLON.Mesh.CreateBox("skyBox", 300.0, this.scene);
         var skybox_material = new BABYLON.StandardMaterial("skyBox", this.scene);
         skybox_material.backFaceCulling = false;
-        skybox_material.reflectionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
+        var cube_texture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
+        skybox_material.reflectionTexture = cube_texture;
         skybox_material.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
         skybox.material = skybox_material;
 
         var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter:5}, this.scene);
         var material = new BABYLON.StandardMaterial("kosh", this.scene);
-        material.refractionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
-        material.reflectionTexture = new BABYLON.CubeTexture("assets/umhlanga_beach_4k", this.scene);
+        material.refractionTexture = cube_texture;
+        material.reflectionTexture = cube_texture;
         // various material params, mostly adjusted from the babylonjs demos.
         material.diffuseColor = new BABYLON.Color3(0, 0, 0);
         material.invertRefractionY = false;
